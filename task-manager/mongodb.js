@@ -8,26 +8,18 @@ async function getData() {
   try {
     const db = client.db(databaseName);
 
-    /* db.collection('users').updateOne({
-      _id: new ObjectId("6411d2b7969305bb5be0ac33")
-    }, {
-      $set: {
-        name: 'Chandler'
-      }
+    /* db.collection('users').deleteOne({
+      name: 'Phoebe'
     }).then((result) => {
       console.log(result)
     }).catch((error) => {
       console.log(error)
     }) */
 
-    db.collection('tasks').updateMany({
-      completed: false
-    }, {
-      $set: {
-        completed: true
-      }
+    db.collection('tasks').deleteOne({
+      description: 'clean the house'
     }).then((result) => {
-      console.log(result.modifiedCount)
+      console.log(result)
     }).catch((error) => {
       console.log(error)
     })
