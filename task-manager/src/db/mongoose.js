@@ -31,39 +31,53 @@ async function main() {
                     throw new Error('Please provide an email')
                 }
             }
+        },
+        password: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 7,
+            validate(value) {
+                if (value.toLowerCase().includes('password')) {
+                    throw new Error('Password cannot contain password')
+                }
+            }
         }
     })
 
-    const me = new User({
+   /*  const me = new User({
         name: 'Michael Scott  ',
-        email: '  mIchaelScoTT@gmail.com'
+        email: '  mIchaelScoTT@gmail.com',
+        password: '         password        '
     })
 
     me.save().then(() => {
         console.log(me)
     }).catch((error) => {
         console.log('Error!', error)
-    }) 
+    })  */
 
-    /* const Task = mongoose.model('Task', {
+    const Task = mongoose.model('Task', {
         description: {
-            type: String
+            type: String,   
+            required: true,
+            trim: true
         }, 
         completed: {
-            type: Boolean
+            type: Boolean,
+            default: false
         }
     })
 
     const task = new Task({
-        description: 'Learn Mongoose',
-        completed: false
+        description: '  eat lunch'
     })
 
     task.save().then(() => {
         console.log(task)
     }).catch((error) => {
         console.log(error)
-    }) */
+    })
 
 
 
