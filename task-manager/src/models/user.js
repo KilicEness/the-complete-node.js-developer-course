@@ -50,6 +50,13 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
+//Relationship for task between user
+userSchema.virtual('tasks', {
+    ref: 'Task',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
 //Hiding private data
 userSchema.methods.toJSON = function () {
     const user = this
