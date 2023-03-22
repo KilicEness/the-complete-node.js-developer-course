@@ -50,6 +50,18 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
+//Hiding private data
+userSchema.methods.toJSON = function () {
+    const user = this
+    const userObject = user.toObject()
+
+    delete userObject.password
+    delete userObject.tokens
+
+    return userObject
+}
+
+//Generating authentication token
 userSchema.methods.generateAuthToken = async function () {
     const user = this
     const token = jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse')
@@ -60,6 +72,7 @@ userSchema.methods.generateAuthToken = async function () {
     return token
 }
 
+//Validation of logging on user
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email })
 
