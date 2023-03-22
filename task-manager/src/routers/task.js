@@ -20,12 +20,22 @@ router.post('/tasks', auth, async (req, res) => {
 })
 
 //Read tasks
+//GET /tasks?completed=true
 router.get('/tasks', auth, async (req, res) => {
+    const match = {}
+
+    if (req.query.completed) {
+        match.completed = req.query.completed === 'true'
+    }
+
     try {
-        await req.user.populate('tasks')
+        await req.user.populate({
+            path: 'tasks',
+            match
+        })
         res.send(req.user.tasks)
     } catch (e) {
-        res.status(404).send(e)
+        res.status(500).send(e)
     }
 })
 
@@ -34,7 +44,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
     const _id = req.params.id
 
     try {
-        const task = await Task.findOne({ _id, owner: req.user._id})
+        const task = await Task.findOne({ _id, owner: req.user._id })
 
         if (!task) {
             res.status(404).send()
@@ -73,7 +83,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
 //Delete task by id
 router.delete('/tasks/:id', auth, async (req, res) => {
     try {
-        const task = await Task.findOneAndDelete({ _id: req.params._id, owner: req.user._id})
+        const task = await Task.findOneAndDelete({ _id: req.params._id, owner: req.user._id })
 
         if (!task) {
             return res.status(404).send()
