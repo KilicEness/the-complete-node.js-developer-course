@@ -17,9 +17,13 @@ app.use(express.static(publicDirectoryPath))
 io.on('connection', (socket) => {
     console.log('new websocket connection')
 
-    //when you joined server events
-    socket.emit('message', generateMessage('Welcome!'))
-    socket.broadcast.emit('message', generateMessage('A new user has joined'))
+    //Join to chat listener
+    socket.on('join', ({ username, room }) => {
+        socket.join(room)
+
+        socket.emit('message', generateMessage('Welcome!'))
+        socket.broadcast.to(room).emit('message', generateMessage(`${username} has joined!`))
+    })
 
     //when you sending a server message events
     socket.on('sendMessage', (message, callback) => {
@@ -29,7 +33,7 @@ io.on('connection', (socket) => {
             return callback('Profanity is not allowed')
         }
 
-        io.emit('message', generateMessage(message))
+        io.to('Center City').emit('message', generateMessage(message))
         callback('Delivered')
     })
 

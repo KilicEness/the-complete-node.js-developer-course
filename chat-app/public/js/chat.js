@@ -11,6 +11,9 @@ const $messages = document.querySelector('#messages')
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML
 
+//Options
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
+
 //client side listen message
 socket.on('message', (message) => {
     console.log(message)
@@ -70,3 +73,6 @@ $sendLocationButton.addEventListener('click', () => {
         })
     })
 })
+
+//Join to chat
+socket.emit('join', { username, room })
